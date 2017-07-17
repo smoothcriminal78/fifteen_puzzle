@@ -206,7 +206,7 @@ fp.shuffle(15)
 # fp.tiles = [[1,2,3,4], [0,5,6,7], [8,9,10,11], [12,13,14,15]]
 # fp.blank = fp.Tile(1, 0)
 fp.show()
-solution = fp.dijkstraSolve()
+solution = fp.aStarSolve()
 
 showSolution(solution)
 # [print(i) for i in fp.allValidMoves()]

@@ -24,12 +24,13 @@ def showBoard(algoFrame, fp):
 
 
 fp = FifteenPuzzle()
-fp.shuffle(5)
-# solution = fp.aStarSolve()
-solution = fp.dijkstraSolve()
+fp.shuffle(8)
+solution1 = fp.aStarSolve()
+solution2 = fp.dijkstraSolve()
 
-for fp in solution:
-    # showBoard(star, fp)
+for fp in solution1:
+    showBoard(star, fp)
+for fp in solution2:
     showBoard(dijkstra, fp)
 
 root.mainloop()
