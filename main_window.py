@@ -1,13 +1,11 @@
 from fifteen_puzzle import *
 from tkinter import *
 
-
 root = Tk()
 
 star = LabelFrame(root, text="A* algorithm",
                     highlightbackground="green", highlightcolor="green",
                     highlightthickness=1, width=100, height=100, bd=0)
-
 star.pack(padx=(10,10), pady=(10,10))
 
 dijkstra = LabelFrame(root, text="dijkstra algorithm",
@@ -26,9 +24,12 @@ def showBoard(algoFrame, fp):
 
 
 fp = FifteenPuzzle()
-fp.shuffle(10)
-solution = fp.aStarSolve()
+fp.shuffle(5)
+# solution = fp.aStarSolve()
+solution = fp.dijkstraSolve()
+
 for fp in solution:
-    showBoard(star, fp)
+    # showBoard(star, fp)
+    showBoard(dijkstra, fp)
 
 root.mainloop()

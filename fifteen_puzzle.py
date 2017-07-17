@@ -165,6 +165,33 @@ class FifteenPuzzle:
                     heapq.heappush(toVisit, (-score[fp], fp))
         return None
 
+    def dijkstraSolve(self):
+        global SOLVED
+        SOLVED = FifteenPuzzle()
+        toVisit, predecessor = [], {}
+
+        toVisit.append(self)
+        predecessor[self] = None
+        cnt = 0
+        while(len(toVisit)>0):
+            candidate = toVisit.pop()
+            cnt+=1
+            if cnt % 10000 == 0:
+                print('Considered {} positions'.format(cnt))
+            if candidate.isSolved():
+                print('Solution considered {} boards'.format(cnt))
+                solution = []
+                backtrace = candidate
+                while backtrace is not None:
+                    solution.insert(0, backtrace)
+                    backtrace = predecessor[backtrace]
+                return solution
+            for fp in candidate.allAdjacentPuzzles():
+                if fp not in predecessor:
+                    predecessor[fp] = candidate
+                    toVisit.append(fp)
+        return None
+
 def showSolution(solution):
     if solution is not None:
         print('Success!  Solution with {} moves:\n'.format(len(solution)))
@@ -174,12 +201,12 @@ def showSolution(solution):
         print('Did not solve.')
 
 fp = FifteenPuzzle()
-fp.shuffle(40)
+fp.shuffle(15)
 # fp.tiles = [[0,1,2,3], [4,5,6,7], [8,9,10,11], [12,13,14,15]]
 # fp.tiles = [[1,2,3,4], [0,5,6,7], [8,9,10,11], [12,13,14,15]]
 # fp.blank = fp.Tile(1, 0)
 fp.show()
-solution = fp.aStarSolve()
+solution = fp.dijkstraSolve()
 
 showSolution(solution)
 # [print(i) for i in fp.allValidMoves()]
