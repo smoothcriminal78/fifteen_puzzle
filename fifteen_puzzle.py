@@ -41,7 +41,6 @@ class FifteenPuzzle:
         return True
 
     def __str__(self):
-        # return str(self.tiles)
         s = ''
         for i in self.tiles:
             s+='|'.join([str(j).rjust(2, ' ') for j in i]) + '\n'
@@ -68,7 +67,9 @@ class FifteenPuzzle:
         return None
 
     def isValidMove(self, tp):
-        if tp.x < 0 or tp.x >= self.DIMS or tp.y < 0 or tp.y >= self.DIMS:
+        if tp.x < 0 or tp.x >= self.DIMS:
+            return False
+        if tp.y < 0 or tp.y >= self.DIMS:
             return False
 
         dx, dy = self.blank.x - tp.x, self.blank.y - tp.y
@@ -87,7 +88,8 @@ class FifteenPuzzle:
         return moves
 
     def move(self, tp):
-        # if not isValidMove(): throw Exception
+        if not self.isValidMove(tp):
+            raise Exception
         self.tiles[self.blank.x][self.blank.y] = self.tiles[tp.x][tp.y]
         self.tiles[tp.x][tp.y] = 0
         self.blank = tp
@@ -100,7 +102,7 @@ class FifteenPuzzle:
     def shuffle(self, n):
         for i in range(n):
             possible = self.allValidMoves()
-            w = int(random.random()) * len(possible)
+            w = random.randrange(len(possible))
             mv = possible[w]
             self.move(mv)
 
@@ -140,7 +142,7 @@ class FifteenPuzzle:
         heapq.heappush(toVisit, (score[self], self))
 
         cnt = 0
-        while len(toVisit) > 0 and len(toVisit) < 100:
+        while len(toVisit) > 0:
             candidate = toVisit.pop()[1]
             cnt+=1
             if cnt % 10000 == 0:
@@ -163,10 +165,21 @@ class FifteenPuzzle:
                     heapq.heappush(toVisit, (-score[fp], fp))
         return None
 
-# def showSolution(solution):
-#     if solution is not None:
-#         print('Success!  Solution with {} moves:\n'.format(len(solution)))
-#         for sp in solution:
-#             sp.show()
-#     else:
-#         print('Did not solve.')
+def showSolution(solution):
+    if solution is not None:
+        print('Success!  Solution with {} moves:\n'.format(len(solution)))
+        for sp in solution:
+            sp.show()
+    else:
+        print('Did not solve.')
+
+fp = FifteenPuzzle()
+fp.shuffle(40)
+# fp.tiles = [[0,1,2,3], [4,5,6,7], [8,9,10,11], [12,13,14,15]]
+# fp.tiles = [[1,2,3,4], [0,5,6,7], [8,9,10,11], [12,13,14,15]]
+# fp.blank = fp.Tile(1, 0)
+fp.show()
+solution = fp.aStarSolve()
+
+showSolution(solution)
+# [print(i) for i in fp.allValidMoves()]
