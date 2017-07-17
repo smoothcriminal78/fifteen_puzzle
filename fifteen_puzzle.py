@@ -130,6 +130,8 @@ class FifteenPuzzle:
         return out
 
     def aStarSolve(self):
+        global SOLVED
+        SOLVED = FifteenPuzzle()
         predecessor, depth, score, toVisit = {}, {}, {}, []
 
         predecessor[self] = None
@@ -161,21 +163,10 @@ class FifteenPuzzle:
                     heapq.heappush(toVisit, (-score[fp], fp))
         return None
 
-def showSolution(solution):
-    if solution is not None:
-        print('Success!  Solution with {} moves:\n'.format(len(solution)))
-        for sp in solution:
-            sp.show()
-    else:
-        print('Did not solve.')
-
-
-SOLVED = FifteenPuzzle()
-fp = FifteenPuzzle();
-fp.shuffle(3);
-print('Shuffled board:')
-fp.show()
-
-print('Solving with A*')
-solution = fp.aStarSolve()
-showSolution(solution);
+# def showSolution(solution):
+#     if solution is not None:
+#         print('Success!  Solution with {} moves:\n'.format(len(solution)))
+#         for sp in solution:
+#             sp.show()
+#     else:
+#         print('Did not solve.')
