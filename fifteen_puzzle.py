@@ -148,13 +148,12 @@ class FifteenPuzzle:
             if cnt % 10000 == 0:
                 print('Considered {} positions'.format(cnt))
             if candidate.isSolved():
-                print('Solution considered {} boards'.format(cnt))
                 solution = []
                 backtrace = candidate
                 while backtrace is not None:
                     solution.insert(0, backtrace)
                     backtrace = predecessor[backtrace]
-                return solution
+                return (solution, 'A* algorithm considered {} boards'.format(cnt))
 
             for fp in candidate.allAdjacentPuzzles():
                 if fp not in predecessor:
@@ -163,7 +162,7 @@ class FifteenPuzzle:
                     estimate = fp.estimateError()
                     score[fp] = depth[candidate] + 1 + estimate
                     heapq.heappush(toVisit, (-score[fp], fp))
-        return None
+        return (None, 'No solution')
 
     def dijkstraSolve(self):
         global SOLVED
@@ -179,18 +178,17 @@ class FifteenPuzzle:
             if cnt % 10000 == 0:
                 print('Considered {} positions'.format(cnt))
             if candidate.isSolved():
-                print('Solution considered {} boards'.format(cnt))
                 solution = []
                 backtrace = candidate
                 while backtrace is not None:
                     solution.insert(0, backtrace)
                     backtrace = predecessor[backtrace]
-                return solution
+                return (solution, 'Dijkstra algorithm considered {} boards'.format(cnt))
             for fp in candidate.allAdjacentPuzzles():
                 if fp not in predecessor:
                     predecessor[fp] = candidate
                     toVisit.append(fp)
-        return None
+        return (None, 'No solution')
 
 def showSolution(solution):
     if solution is not None:
