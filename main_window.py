@@ -1,5 +1,6 @@
 from fifteen_puzzle import *
 from tkinter import *
+import sys
 
 root = Tk()
 
@@ -17,14 +18,18 @@ def showBoard(algoFrame, fp):
     f = Frame(algoFrame, highlightbackground="black", highlightcolor="green",
                     highlightthickness=1, width=100, height=100, bd=0)
     for (i, t) in enumerate(fp.tiles):
-        for j in range(fp.DIMS):
-            Label(f, text=str(t[j]).rjust(2, ' '),
-                  relief=FLAT).grid(row=i, column=j)
+        for j in range(fp.c):
+            if t[j] == 0:
+                Label(f, text=str('').rjust(2, ' '),
+                    relief=FLAT, bg="black").grid(row=i, column=j)
+            else:
+                Label(f, text=str(t[j]).rjust(2, ' '),
+                    relief=FLAT).grid(row=i, column=j)
     f.pack(side = LEFT, padx=(7, 7), pady=(7,7))
 
 
-fp = FifteenPuzzle()
-fp.shuffle(8)
+fp = FifteenPuzzle(2, 5)
+fp.shuffle(10)
 solution1 = fp.aStarSolve()
 solution2 = fp.dijkstraSolve()
 

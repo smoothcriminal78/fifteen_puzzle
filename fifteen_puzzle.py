@@ -12,16 +12,16 @@ class FifteenPuzzle:
         def __str__(self):
             return '{} {}'.format(self.x, self.y)
 
-    DIMS = 4
-    def __init__(self):
-        self.tiles = [[x + y for x in range(self.DIMS)]
-                        for y in range(1, self.DIMS ** 2, self.DIMS)]
-        self.blank = self.Tile(self.DIMS-1, self.DIMS-1)
+    def __init__(self, r = 4, c = 4):
+        self.tiles = [[x * c + y for y in range(1, c+1)] for x in range(0, r)]
+        self.r, self.c = r, c
+        self.blank = self.Tile(self.r-1, self.c-1)
         self.tiles[-1][-1] = 0
 
     def __copy__(self):
         copy = FifteenPuzzle()
         copy.tiles = [list(t) for t in self.tiles]
+        copy.r, copy.c = self.r, self.c
         copy.blank = self.blank
         return copy
 
@@ -31,7 +31,7 @@ class FifteenPuzzle:
     def __hash__(self):
         out = 0
         for tp in self.allTilePos():
-            out = (self.DIMS ** 2 * out) + self.tile(tp)
+            out = (self.r ** 2 * out) + self.tile(tp)
         return out
 
     def __eq__(self, other):
@@ -50,7 +50,7 @@ class FifteenPuzzle:
     #     return str(self)
 
     def allTilePos(self):
-        return [self.Tile(i, j) for i in range(self.DIMS) for j in range(self.DIMS)]
+        return [self.Tile(i, j) for i in range(self.r) for j in range(self.c)]
 
     def show(self):
         for i in self.tiles:
@@ -67,9 +67,9 @@ class FifteenPuzzle:
         return None
 
     def isValidMove(self, tp):
-        if tp.x < 0 or tp.x >= self.DIMS:
+        if tp.x < 0 or tp.x >= self.r:
             return False
-        if tp.y < 0 or tp.y >= self.DIMS:
+        if tp.y < 0 or tp.y >= self.c:
             return False
 
         dx, dy = self.blank.x - tp.x, self.blank.y - tp.y
@@ -99,7 +99,7 @@ class FifteenPuzzle:
         fp.move(tp)
         return fp
 
-    def shuffle(self, n):
+    def shuffle(self, n=5):
         for i in range(n):
             possible = self.allValidMoves()
             w = random.randrange(len(possible))
@@ -108,8 +108,8 @@ class FifteenPuzzle:
 
     def numOfMisplacedTiles(self):
         wrong = 0
-        for i in range(self.DIMS):
-            for j in range(self.DIMS):
+        for i in range(self.r):
+            for j in range(self.c):
                 if self.tiles[i][j] > 0 and self.tiles[i][j] != SOLVED.tiles[i][j]:
                     wrong+=1
         return wrong
@@ -133,7 +133,7 @@ class FifteenPuzzle:
 
     def aStarSolve(self):
         global SOLVED
-        SOLVED = FifteenPuzzle()
+        SOLVED = FifteenPuzzle(self.r, self.c)
         predecessor, depth, score, toVisit = {}, {}, {}, []
 
         predecessor[self] = None
@@ -167,7 +167,7 @@ class FifteenPuzzle:
 
     def dijkstraSolve(self):
         global SOLVED
-        SOLVED = FifteenPuzzle()
+        SOLVED = FifteenPuzzle(self.r, self.c)
         toVisit, predecessor = [], {}
 
         toVisit.append(self)
@@ -199,14 +199,3 @@ def showSolution(solution):
             sp.show()
     else:
         print('Did not solve.')
-
-fp = FifteenPuzzle()
-fp.shuffle(15)
-# fp.tiles = [[0,1,2,3], [4,5,6,7], [8,9,10,11], [12,13,14,15]]
-# fp.tiles = [[1,2,3,4], [0,5,6,7], [8,9,10,11], [12,13,14,15]]
-# fp.blank = fp.Tile(1, 0)
-fp.show()
-solution = fp.aStarSolve()
-
-showSolution(solution)
-# [print(i) for i in fp.allValidMoves()]
