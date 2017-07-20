@@ -1,5 +1,6 @@
 from fifteen_puzzle import *
 from tkinter import *
+from tkinter import messagebox
 import sys
 
 root = Tk()
