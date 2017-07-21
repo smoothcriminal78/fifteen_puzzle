@@ -3,6 +3,7 @@ from fifteen_puzzle import *
 from tkinter import messagebox
 
 top = Tk()
+top.title('Fifteen title puzzle')
 # top.geometry("400x400")
 
 board_frm = Frame(top, highlightbackground="green", highlightcolor="green",
@@ -10,7 +11,7 @@ board_frm = Frame(top, highlightbackground="green", highlightcolor="green",
 
 board = FifteenPuzzle(4, 4)
 SOLVED = FifteenPuzzle(4, 4)
-board.shuffle(2)
+board.shuffle(15)
 moves = 0
 
 def OnButtonClick(tile):
