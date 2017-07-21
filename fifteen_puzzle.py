@@ -1,4 +1,5 @@
 import copy
+import math
 import random
 import heapq
 
@@ -114,11 +115,22 @@ class FifteenPuzzle:
                     wrong+=1
         return wrong
 
-    def isSolved(self):
-        return self.numOfMisplacedTiles() == 0
+    def manhattanDistance(self):
+        sum = 0
+        for tp in self.allTilePos():
+            val = self.tile(tp)
+            if val > 0:
+                correct = SOLVED.whereIs(val)
+                correct.x, correct.y = tp.x, tp.y
+                sum += abs(correct.x) + abs(correct.y)
+        return sum
 
     def estimateError(self):
-        return self.numOfMisplacedTiles()
+        # return self.numOfMisplacedTiles()
+        return self.manhattanDistance()
+
+    def isSolved(self):
+        return self.numOfMisplacedTiles() == 0
 
     def moveClone(self, tp):
         out = copy.copy(self)
@@ -130,6 +142,7 @@ class FifteenPuzzle:
         for tp in self.allValidMoves():
             out.append(self.moveClone(tp))
         return out
+
 
     def aStarSolve(self):
         global SOLVED
@@ -197,3 +210,8 @@ def showSolution(solution):
             sp.show()
     else:
         print('Did not solve.')
+
+board = FifteenPuzzle(4, 4)
+board.shuffle(5)
+solution = board.aStarSolve()[0]
+showSolution(solution)
